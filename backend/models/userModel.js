@@ -5,10 +5,12 @@ const UserSchema = new Schema({
   name: String,
   email: String,
   image_url: String,
-  address_street: String,
-  address_city: String,
+  address: {
+    street: String,
+    city: String,
+  },
   articles: [{
-    type: mongoose.Schema.Types.ObjectId,
+    type: Number,
     ref: "Article"
   }]
 })

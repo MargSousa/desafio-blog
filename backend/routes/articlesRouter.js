@@ -8,12 +8,39 @@ const Article = require('../models/articleModel');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-})
-
-router.get('/:id', (req, res) => {
-})
+  Article.find({"title" : `/.*${req.query.search}.*/`}, (err, article) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      console.log("ok")
+      res.status(200).json(article);
+    }
+  })
+});
 
 router.put('/:id', (req, res) => {
+  console.log("update")
+  Article.findById(req.params.id, (err, article) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      if(article) {
+        article.title = req.body.title;
+        article.body = req.body.body;
+
+        article.save().then((err, user) =>{
+          if (err) {
+            console.log("err", err)
+            res.status(500).send('Error, article not updated');
+          } else {
+            res.status(200).json(article);
+          }
+        })
+      } else {
+        res.status(404).json('Article not registered');
+      }
+    }
+  })
 })
 
 module.exports = router;

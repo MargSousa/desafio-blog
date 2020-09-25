@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 
+const Article = require('../models/articleModel');
 const User = require('../models/userModel');
 
 router.get('/', (req, res) => {
@@ -28,47 +29,54 @@ router.get('/:id', (req, res) => {
   })
 })
 
-router.put('/:id', (req, res) => {
-  User.findById(req.params.id, (err, user) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      if(user) {
-        user.name = req.body.name;
-        user.email = req.body.email;
-        user.image_url = req.body.image_url;
-        user.address_city = req.body.address_city;
-        user.address_street = req.body.address_street;
+router.post('/', (req, res) => {
+  req.body.map(user => {
+    //const newId = new mongoose.Types.ObjectId();
+    const newUserData = Object.assign({ 
+      name: user.name,
+      email: user.email,
+      image_url: user.image_url,
+      address: {
+        city: user.city,
+        street: user.street
+      },
+      articles: [(user.article.id)]
+    });
+    
+    const newUser = new User(newUserData);
 
-        user.save().then((err, user) =>{
+    newUser.save().then((err, user) => {
+      if (err) {
+        console.log("NOK", err)
+        res.status(500).send('User not added');
+      } else {
+        console.log("save article")
+        const newArticleData = Object.assign({ 
+          id: user.article.id,
+          title: user.article.title,
+          body: user.body,
+        });
+        const newArticle = new Article(newArticleData);
+        newArticle.save().then((err, user) => {
           if (err) {
-            console.log("err", err)
-            res.status(500).send('Error, user not updated');
+            console.log("NOK", err)
+            res.status(500).send('Article not added');
           } else {
-            res.status(200).json(user);
+            res.status(200).send(user)
           }
         })
-      } else {
-        res.status(404).json('User not registered in db');
       }
-    }
+    })
   })
 })
 
-router.post('/', (req, res) => {
-  const newId = new mongoose.Types.ObjectId();
-  // const newUserData = Object.assign(req.body);
-  // const newUser = new User(newUserData);
-  const newUserData = Object.assign({ _id: newId }, req.body);
-  const newUser = new User(newUserData);
 
-  newUser.save().then((err, user) => {
-    console.log(user);
+router.delete('/', (req, res) => {
+  User.deleteMany({}, (err, result) => {
     if (err) {
-      console.log("err", err)
-      res.status(500).send('User not added');
+      res.status(500).send('Collection not deleted');
     } else {
-      res.status(200).json(user);
+      res.status(200).json(result);
     }
   })
 })
