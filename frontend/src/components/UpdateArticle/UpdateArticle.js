@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 class UpdateArticle extends React.Component {
   constructor(props) {
@@ -17,7 +18,12 @@ class UpdateArticle extends React.Component {
   }
 
   handleSubmit = (event) => {
-    console.log("submitted");
+    event.preventDefault();
+    
+    axios.put(`/articles/${this.state.id}`, this.state)
+    .then(res => {
+      console.log(res)
+    })
   }
 
   render() {

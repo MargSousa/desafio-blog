@@ -1,6 +1,6 @@
 import React from 'react';
 import UpdateArticle from './components/UpdateArticle/UpdateArticle';
-import ButtonsSection from './components/ButtonsSection/ButtonsSection';
+import GetData from './components/GetData/GetData';
 import SearchResults from './components/SearchResults/SearchResults';
 import './App.css';
 
@@ -9,7 +9,7 @@ function App() {
     <div className="App">
       <div className="app-top">
         <UpdateArticle />
-        <ButtonsSection />
+        <GetData />
       </div>
       <div className="app-bottom">
         <SearchResults />

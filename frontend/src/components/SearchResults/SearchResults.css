@@ -34,6 +34,11 @@
   margin-bottom: 20px;
 }
 
+.no-results {
+  color: grey;
+  margin: 20px;
+}
+
 @media(max-width: 800px) {
   .card {
     width: 100%;
