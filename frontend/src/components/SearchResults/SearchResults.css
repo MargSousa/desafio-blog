@@ -1,0 +1,41 @@
+.SearchResults {
+  padding-top: 30px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.results-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.card {
+  display: flex;
+  width: 40%;
+  flex-direction: column;
+  border-radius: 20px;
+  border: solid 1px grey;
+  background-color: #F5F5F5;
+  padding: 20px 20px;
+  margin: 10px 20px;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+@media(max-width: 800px) {
+  .card {
+    width: 100%;
+  }
+}
