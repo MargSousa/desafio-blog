@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 
@@ -31,6 +30,8 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   let errors = "";
+  let articlesData = [];
+
   req.body.map(user => {
     const newUserData = Object.assign({ 
       name: user.name,
@@ -51,15 +52,15 @@ router.post('/', (req, res) => {
       title: user.article.title,
       body: user.article.body,
     });
-
     const newArticle = new Article(newArticleData);
+    articlesData.push(newArticle);
     newArticle.save().catch(err => errors = err.message)
   })
 
   if (errors) {
     res.status(500).send(errors);
   } else {
-    res.status(200).send("Collection added")
+    res.status(200).send(articlesData)
   }
 })
 
@@ -68,7 +69,13 @@ router.delete('/', (req, res) => {
     if (err) {
       res.status(500).send('Collection not deleted');
     } else {
-      res.status(200).json(result);
+      Article.deleteMany({}, (err, result) => {
+        if (err) {
+          res.status(500).send('Collection not deleted');
+        } else {
+          res.status(200).json(result);
+        }
+      })
     }
   })
 })

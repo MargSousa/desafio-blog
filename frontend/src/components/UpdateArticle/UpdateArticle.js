@@ -12,7 +12,6 @@ class UpdateArticle extends React.Component {
   }
 
   handleChange = (event) => {
-    console.log(event.target.name);
     const { name, value } = event.target;
     this.setState({ [name]: value})
   }
@@ -22,7 +21,12 @@ class UpdateArticle extends React.Component {
     
     axios.put(`/articles/${this.state.id}`, this.state)
     .then(res => {
-      console.log(res)
+      this.props.update();
+      this.setState({
+        id: '',
+        title: '',
+        body: ''
+      })
     })
   }
 

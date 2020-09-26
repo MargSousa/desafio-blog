@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const GetData = () => {
+const GetData = (props) => {
 
   const [search, setSearch] = useState(''); 
 
   const getRandomResults = async () => {
     let newData = [];
     for (let i = 0; i < 20; i++) {
+    
       const randomUser = Math.floor(Math.random() * 9) + 1;
       const randomPost = Math.floor(Math.random() * 9);
       let users = [];
@@ -41,22 +42,32 @@ const GetData = () => {
     return newData;
   }
 
+  const deleteCollection = () => {
+    props.delete();
+  }
+
+  const updateCollection = (input) => {
+    props.collection(input);
+  }
+
   const handleClick = (event) => {
     const { id } = event.target;
 
     if (id === "create") {
       getRandomResults().then(res => {
         axios.post('/users', res)
-        .then(res => {
-          if (res.status === 200) {
-            console.log("Collection created")
-          }})
+        .then(res => { 
+          console.log("Collection created");
+          updateCollection(res.data);
+        })
+        
       });
     } else {
       axios.delete('/users')
         .then(res => {
           if (res.status === 200) {
             console.log("Collection deleted")
+            deleteCollection();
           }})
     }
   }
@@ -64,12 +75,19 @@ const GetData = () => {
   const handleSearch = (event) => {
     const { value } = event.target;
     setSearch(value);
+
+    axios.get(`/articles?search=${value}`)
+    .then(res => {
+      updateCollection(res.data);
+    })
   }
 
   const handleSubmit = (event) => {
     event.preventDefault();
     axios.get(`/articles?search=${search}`)
-    .then(res => console.log("search done"))
+    .then(res => {
+      updateCollection(res.data);
+    })
   }
 
   return (

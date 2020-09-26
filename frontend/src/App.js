@@ -9,21 +9,29 @@ function App() {
 
   const [collection, setCollection] = useState([]);
 
-  const handleCollection = (data) => {
-    setCollection(data);
+  const deleteCollection = () => {
+    setCollection([]);
   }
 
-  useEffect(() => {
+  const getCollection = (input) => {
+    setCollection(input);
+  }
+
+  const updateCollection = () => {
     axios.get('/articles').then( res => {
       setCollection(res.data);
     })
+  }
+
+  useEffect(() => {
+    updateCollection();
   }, [])
 
   return (
     <div className="App">
       <div className="app-top">
-        <UpdateArticle />
-        <GetData />
+        <UpdateArticle update={updateCollection} />
+        <GetData delete={deleteCollection} collection={getCollection} />
       </div>
       <div className="app-bottom">
         <SearchResults collection={collection} />

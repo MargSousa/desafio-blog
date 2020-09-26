@@ -1,25 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 import './SearchResults.css';
 
 const SearchResults = (props) => {
 
-  const [articles, setArticles] = useState([]); 
+  const { collection } = props;
 
   return (
     <div className="SearchResults">
       <div className="main-title">Search Results</div>
       <div className="results-cards">
 
-        { articles.length > 0 ?
-          (articles.map(article => 
-            <div className="card" key={article.id}>
-              <div className="card-title">{article.title}</div>
+        { collection.length > 0 ?
+          (collection.map(article => 
+            <div className="card" key={article._id}>
+              <div className="card-title">Article {article.id} - {article.title}</div>
               <div className="card-text">{article.body}</div>
             </div>
           ))
         :
-        (<div className="no-results">No results to show... Create Articles & Articles</div>)
+          (<div className="no-results">No results to show...</div>)
         }
       </div>
     </div>
