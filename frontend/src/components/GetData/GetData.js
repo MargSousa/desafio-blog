@@ -3,43 +3,40 @@ import axios from 'axios';
 
 const GetData = (props) => {
 
-  const [search, setSearch] = useState(''); 
+  const [search, setSearch] = useState('');  
 
   const getRandomResults = async () => {
-    let newData = [];
+    let collectionData = [];
+    let randomUsers = [];
+    let randomPosts = [];
+
     for (let i = 0; i < 20; i++) {
-    
-      const randomUser = Math.floor(Math.random() * 9) + 1;
-      const randomPost = Math.floor(Math.random() * 9);
-      let users = [];
-      let userData = [];
-      let userImage = "";
+      randomUsers.push(Math.floor(Math.random() * 9) + 1)
+      randomPosts.push(Math.floor(Math.random() * 9));
+    };
 
-      await axios.get('https://jsonplaceholder.typicode.com/users')
-      .then(res => users = res.data);
+    await axios.get('https://jsonplaceholder.typicode.com/users')
+    .then(res => {
+      randomUsers.map(id => {
+        const data = res.data.filter(user => user.id === id);
+        return collectionData.push(data[0]);
+      })
+    });
 
-      await axios.get('https://jsonplaceholder.typicode.com/photos')
+    await axios.get('https://jsonplaceholder.typicode.com/photos')
+    .then(res => collectionData = collectionData.map(user => ({ ...user, image_url: res.data[user.id].thumbnailUrl })))
+
+
+    await axios.get('https://jsonplaceholder.typicode.com/photos')
+    .then(res => collectionData = collectionData.map(user => ({ ...user, image_url: res.data[user.id].thumbnailUrl })))
+
+    for (let i = 0; i < 20; i++) {
+      await axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${randomUsers[i]}`)
       .then(res => {
-        userImage = res.data[randomUser].thumbnailUrl;
-      });
-
-      await axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${randomUser}`)
-      .then(res => { 
-        const user = users.filter(user => user.id === randomUser);
-        userData = {
-          name: user[0].name,
-          email: user[0].email,
-          image_url: userImage,
-          address: {
-            city: user[0].address.city,
-            street: user[0].address.street,
-          },
-          article: res.data[randomPost]
-        }
-      });
-      newData.push(userData);
+        collectionData[i].article = res.data[randomPosts[i]];
+      })
     }
-    return newData;
+    return collectionData;
   }
 
   const deleteCollection = () => {
@@ -60,7 +57,6 @@ const GetData = (props) => {
           console.log("Collection created");
           updateCollection(res.data);
         })
-        
       });
     } else {
       axios.delete('/users')

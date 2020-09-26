@@ -21,10 +21,6 @@
   background-color: #F5F5F5;
   padding: 20px 20px;
   margin: 10px 20px;
-  -webkit-line-clamp: 4;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: normal;
 }
 
 .card-title {
@@ -43,5 +39,6 @@
 @media(max-width: 800px) {
   .card {
     width: 100%;
+    font-size: 14px;
   }
 }
