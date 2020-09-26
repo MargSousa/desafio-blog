@@ -38,8 +38,8 @@ router.post('/', (req, res) => {
       email: user.email,
       image_url: user.image_url,
       address: {
-        city: user.city,
-        street: user.street
+        city: user.address.city,
+        street: user.address.street
       },
       articles: [(user.article.id)]
     });
