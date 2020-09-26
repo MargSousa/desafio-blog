@@ -30,8 +30,8 @@ router.get('/:id', (req, res) => {
 })
 
 router.post('/', (req, res) => {
+  let errors = "";
   req.body.map(user => {
-    //const newId = new mongoose.Types.ObjectId();
     const newUserData = Object.assign({ 
       name: user.name,
       email: user.email,
@@ -42,34 +42,26 @@ router.post('/', (req, res) => {
       },
       articles: [(user.article.id)]
     });
-    
+
     const newUser = new User(newUserData);
+    newUser.save().catch(err => errors = err.messages)
 
-    newUser.save().then((err, user) => {
-      if (err) {
-        console.log("NOK", err)
-        res.status(500).send('User not added');
-      } else {
-        console.log("save article")
-        const newArticleData = Object.assign({ 
-          id: user.article.id,
-          title: user.article.title,
-          body: user.body,
-        });
-        const newArticle = new Article(newArticleData);
-        newArticle.save().then((err, user) => {
-          if (err) {
-            console.log("NOK", err)
-            res.status(500).send('Article not added');
-          } else {
-            res.status(200).send(user)
-          }
-        })
-      }
-    })
+    const newArticleData = Object.assign({ 
+      id: user.article.id,
+      title: user.article.title,
+      body: user.article.body,
+    });
+
+    const newArticle = new Article(newArticleData);
+    newArticle.save().catch(err => errors = err.message)
   })
-})
 
+  if (errors) {
+    res.status(500).send(errors);
+  } else {
+    res.status(200).send("Collection added")
+  }
+})
 
 router.delete('/', (req, res) => {
   User.deleteMany({}, (err, result) => {

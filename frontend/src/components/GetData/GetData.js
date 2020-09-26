@@ -48,7 +48,6 @@ const GetData = () => {
       getRandomResults().then(res => {
         axios.post('/users', res)
         .then(res => {
-          console.log(res)
           if (res.status === 200) {
             console.log("Collection created")
           }})

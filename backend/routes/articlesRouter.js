@@ -2,20 +2,30 @@ const axios = require('axios');
 const mongoose = require('mongoose');
 const express = require('express');
 
-const User = require('../models/userModel');
 const Article = require('../models/articleModel');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  Article.find({"title" : `/.*${req.query.search}.*/`}, (err, article) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      console.log("ok")
-      res.status(200).json(article);
-    }
-  })
+  if (req.query.search) {
+    Article.find({"title" : `/.*${req.query.search}.*/`}, (err, article) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        console.log("search ok")
+        res.status(200).json(article);
+      }
+    })
+  } else {
+    Article.find({}, (err, articles) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        console.log("geral ok")
+        res.status(200).json(articles);
+      }
+    })
+  }
 });
 
 router.put('/:id', (req, res) => {

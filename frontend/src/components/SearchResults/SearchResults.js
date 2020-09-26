@@ -1,24 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './SearchResults.css';
 
-const SearchResults = () => {
+const SearchResults = (props) => {
 
-  const articlesData = [
-    { id: 1,
-      title: 'Article 1',
-      body: 'Texto texto texto'
-    },
-    { id: 2,
-      title: 'Article 2',
-      body: 'Texto texto texto'
-    },
-    { id: 3,
-      title: 'Article 3',
-      body: 'Texto texto texto'
-    },
-  ]
-
-  const [articles, setArticles] = useState(articlesData); 
+  const [articles, setArticles] = useState([]); 
 
   return (
     <div className="SearchResults">
@@ -33,7 +19,7 @@ const SearchResults = () => {
             </div>
           ))
         :
-        (<div className="no-results">No results to show... Click create Articles</div>)
+        (<div className="no-results">No results to show... Create Articles & Articles</div>)
         }
       </div>
     </div>

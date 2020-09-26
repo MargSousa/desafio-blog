@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const ArticleSchema = new Schema({
-  id: mongoose.Schema.Types.ObjectId,
+  id: Number,
   title: String,
   body: String,
 })
