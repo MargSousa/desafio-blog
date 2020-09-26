@@ -9,7 +9,6 @@ const usersRouter = require('./routes/usersRouter');
 app.use(express.json());
 
 app.use('/articles', articlesRouter);
-app.use('/users', usersRouter);
 
 mongoose.connect(process.env.DB_URL, {useNewUrlParser: true, useUnifiedTopology: true});
 

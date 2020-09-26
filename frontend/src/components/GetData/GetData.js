@@ -52,17 +52,17 @@ const GetData = (props) => {
 
     if (id === "create") {
       getRandomResults().then(res => {
-        axios.post('/users', res)
+        axios.post('/articles/random', res)
         .then(res => { 
-          console.log("Collection created");
+          console.log("Collections created");
           updateCollection(res.data);
         })
       });
     } else {
-      axios.delete('/users')
+      axios.delete('/articles/all')
         .then(res => {
           if (res.status === 200) {
-            console.log("Collection deleted")
+            console.log("Collections deleted")
             deleteCollection();
           }})
     }
